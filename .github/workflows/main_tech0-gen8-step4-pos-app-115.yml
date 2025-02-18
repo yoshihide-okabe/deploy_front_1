@@ -21,7 +21,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '20.x'
+          node-version: "20.x"
 
       - name: npm install, build, and test
         run: |
@@ -29,8 +29,16 @@ jobs:
           npm run build --if-present
           npm run test --if-present
 
+      # ここにコードを追加 --------------------------------------------
+      - name: Copy artifact for deployment job
+        run: |
+          mkdir deploy
+          cp -r ./.next/standalone/. ./deploy
+          cp -r ./public ./deploy
+          cp -r ./.next/static/. ./deploy/.next/static
+      # ここまで追加 --------------------------------------------------
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: zip release.zip ./deploy -r #ここを修正(修正前→run: zip release.zip ./* -r)
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -42,9 +50,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-      name: 'Production'
+      name: "Production"
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
@@ -53,12 +61,12 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
-      
-      - name: 'Deploy to Azure Web App'
+
+      - name: "Deploy to Azure Web App"
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'tech0-gen8-step4-pos-app-115'
-          slot-name: 'Production'
-          package: .
+          app-name: "tech0-gen8-step4-pos-app-115"
+          slot-name: "Production"
+          package: ./deploy #ここを修正(修正前→package: .)
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B71B5BC49AA84C3EB3A5EA53ED7650F5 }}
