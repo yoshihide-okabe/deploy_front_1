@@ -20,7 +20,7 @@ export default function CodeInput() {
   };
 
   // コンソールログを出力
-  console.log("API_URL:", API_URL);
+  console.log("API_URL after fix:", API_URL);
 
   const handleReadCode = async () => {
     if (!API_URL) {
