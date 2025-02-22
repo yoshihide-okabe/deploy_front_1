@@ -10,31 +10,38 @@ type Product = {
 
 export default function CodeInput() {
   const [code, setCode] = useState<string>("");
-  // const [product, setProduct] = useState(null);
-  // useState の型を明示的に指定 (修正点)
   const [product, setProduct] = useState<Product | null>(null);
+
+  // 環境変数から API エンドポイントを取得
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCode(e.target.value);
   };
 
   const handleReadCode = async () => {
+    if (!API_URL) {
+      console.error("API URL が設定されていません。");
+      return;
+    }
+
     try {
-      const response = await fetch(
-        `https://tech0-gen8-step4-pos-app-116.azurewebsites.net/${code}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/product/${code}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (!response.ok) {
-        throw new Error("サーバーエラー");
+        throw new Error(`サーバーエラー: ${response.status}`);
       }
 
       const data = await response.json();
+
+      if (!data.product_name || isNaN(Number(data.product_price))) {
+        throw new Error("データのフォーマットが不正です。");
+      }
 
       // product_price を数値型 (number) に変換してセット (修正点)
       const formattedData: Product = {
@@ -44,7 +51,11 @@ export default function CodeInput() {
 
       setProduct(formattedData);
     } catch (error) {
-      console.error("商品情報の取得に失敗しました", error);
+      if (error instanceof Error) {
+        console.error("商品情報の取得に失敗しました", error.message);
+      } else {
+        console.error("予期ないしないエラーが発生しました");
+      }
       setProduct(null);
     }
   };
