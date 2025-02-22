@@ -73,44 +73,60 @@ export default function CodeInput() {
   };
 
   return (
-    <div className="p-4 bg-white w-80 border rounded-md shadow-lg ml-4">
-      <div className="flex flex-col items-start">
-        <input
-          type="text"
-          value={code}
-          onChange={handleInputChange}
-          className="border p-2 w-full text-lg text-left"
-          placeholder="商品コードを入力"
-        />
-        <button
-          onClick={handleReadCode}
-          className="mt-2 bg-white text-black border px-4 py-2 rounded w-full"
-        >
-          商品コード 読み込み
-        </button>
-      </div>
-
-      {product && (
-        <div className="mt-4 p-2 border w-full text-center bg-white rounded-md">
-          <p className="text-lg font-semibold">{product.product_name}</p>
-          <p className="text-gray-700">{product.product_price}円</p>
+    <div className="flex justify-center items-center h-screen bg-gray-200">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-2/3 flex">
+        {/* 左側 (商品入力) */}
+        <div className="w-1/2 pr-4 border-r">
+          <input
+            type="text"
+            value={code}
+            onChange={handleInputChange}
+            className="border p-2 w-full text-lg text-left"
+            placeholder="商品コードを入力"
+          />
           <button
-            onClick={handleAddToList}
+            onClick={handleReadCode}
             className="mt-2 bg-white text-black border px-4 py-2 rounded w-full"
           >
-            追加
+            商品コード 読み込み
           </button>
-        </div>
-      )}
 
-      {purchaseList.length > 0 && (
-        <div className="mt-4 p-2 border w-full bg-white rounded-md">
-          <p className="font-semibold">購入リスト</p>
-          {purchaseList.map((item, index) => (
-            <p key={index} className="text-gray-700">
-              {item.product_name} x1 {item.product_price}円
-            </p>
-          ))}
+          {product && (
+            <>
+              <input
+                type="text"
+                className="border p-2 w-full mb-2"
+                value={product.product_name}
+                readOnly
+              />
+              <input
+                type="text"
+                className="border p-2 w-full mb-2"
+                value={`${product.product_price}円`}
+                readOnly
+              />
+              <button
+                className="bg-blue-700 text-white w-full p-2"
+                onClick={handleAddToList}
+              >
+                追加
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* 右側 (購入リスト) */}
+        <div className="w-1/2 pl-4">
+          <h2 className="text-lg font-bold mb-2">購入リスト</h2>
+          <div className="border p-4 h-40 overflow-auto mb-4">
+            <ul>
+              {purchaseList.map((item, index) => (
+                <li key={index} className="border-b py-1">
+                  {item.product_name} x1 {item.product_price}円
+                </li>
+              ))}
+            </ul>
+          </div>
           <button
             onClick={handlePurchase}
             className="mt-2 bg-white text-black border px-4 py-2 rounded w-full"
@@ -118,7 +134,7 @@ export default function CodeInput() {
             購入
           </button>
         </div>
-      )}
+      </div>
     </div>
   );
 }
