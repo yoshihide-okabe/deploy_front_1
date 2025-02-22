@@ -73,7 +73,7 @@ export default function CodeInput() {
   };
 
   return (
-    <div className="p-4 bg-gray-100 w-80 border rounded-md shadow-lg ml-4">
+    <div className="p-4 bg-white w-80 border rounded-md shadow-lg ml-4">
       <div className="flex flex-col items-start">
         <input
           type="text"
@@ -84,7 +84,7 @@ export default function CodeInput() {
         />
         <button
           onClick={handleReadCode}
-          className="mt-2 bg-blue-300 text-black px-4 py-2 rounded w-full"
+          className="mt-2 bg-white text-black border px-4 py-2 rounded w-full"
         >
           商品コード 読み込み
         </button>
@@ -96,7 +96,7 @@ export default function CodeInput() {
           <p className="text-gray-700">{product.product_price}円</p>
           <button
             onClick={handleAddToList}
-            className="mt-2 bg-green-300 text-black px-4 py-2 rounded w-full"
+            className="mt-2 bg-white text-black border px-4 py-2 rounded w-full"
           >
             追加
           </button>
@@ -113,7 +113,7 @@ export default function CodeInput() {
           ))}
           <button
             onClick={handlePurchase}
-            className="mt-2 bg-blue-500 text-white px-4 py-2 rounded w-full"
+            className="mt-2 bg-white text-black border px-4 py-2 rounded w-full"
           >
             購入
           </button>
