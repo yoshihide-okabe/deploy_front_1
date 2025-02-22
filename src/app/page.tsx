@@ -19,6 +19,9 @@ export default function CodeInput() {
     setCode(e.target.value);
   };
 
+  // 環境変数から API エンドポイントを取得
+  console.log("API_URL:", API_URL);
+
   const handleReadCode = async () => {
     if (!API_URL) {
       console.error("API URL が設定されていません。");
